@@ -11,24 +11,15 @@ bl_info = {
     "category": "Object"
 }
 
-
 import bpy
-import bmesh
-from mathutils import Vector
 from bpy.types import Panel, Operator
 
 def my_button_function(self, context):
-
-    obj = bpy.context.selected_objects
-
     bpy.ops.object.mode_set(mode='OBJECT')
-
-    bpy.ops.view3d.snap_cursor_to_active()
-
+    context.scene.cursor.location = context.active_object.location
     bpy.ops.object.origin_set(type='ORIGIN_CURSOR', center='MEDIAN')
 
-
-class MyPanel(Panel):
+class FSO_OO_MyPanel(Panel):
     bl_label = "Set Origin to Other Obj"
     bl_idname = "OBJECT_PT_set_oprigin_to_other_obj_panel"
     bl_space_type = 'VIEW_3D'
@@ -40,7 +31,7 @@ class MyPanel(Panel):
         layout = self.layout
         layout.operator("object.set_oprigin_to_other_obj_button", text="Set Origin to Other Obj")
 
-class MyButton(Operator):
+class FSO_OO_MyButton(Operator):
     bl_idname = "object.set_oprigin_to_other_obj_button"
     bl_label = "Set Origin to Other Obj"
 
@@ -49,8 +40,8 @@ class MyButton(Operator):
         return {'FINISHED'}
     
 classes = [
-    MyPanel,
-    MyButton
+    FSO_OO_MyPanel,
+    FSO_OO_MyButton
 ]
 
 def register():
@@ -59,7 +50,7 @@ def register():
 
 def unregister():
     for cl in reversed(classes):
-        bpy.utils.register_class(cl)
+        bpy.utils.unregister_class(cl)
 
 if __name__ == "__main__":
     register()
